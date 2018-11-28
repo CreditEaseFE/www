@@ -154,10 +154,8 @@ export default class Pay extends React.Component {
                 <br />
                 付款后刷新页面查看次数，1分钟内生效
                 <br />
-                不支持退款，包括但不限于饿了么、美团和谐等因素
-                <br />
                 <span style={{ color: "#dd2323" }}>
-                  由于最近饿了么不稳定，请谨慎购买饿了么{cardName}
+                  不支持退款，包括但不限于美团和谐等因素
                 </span>
               </p>
               <Radio.Group
@@ -168,11 +166,8 @@ export default class Pay extends React.Component {
                 style={{ marginBottom: "12px" }}
               >
                 <Radio value={0}>美团{cardName}-每天获得20次</Radio>
-                <br />
-                <Radio value={1} style={{ margin: "10px 0" }}>
-                  饿了么{cardName}-每天获得50次
-                </Radio>
               </Radio.Group>
+              <p>饿了么和星选，暂不支持付费购买</p>
               <br />
               <div>
                 <Button
