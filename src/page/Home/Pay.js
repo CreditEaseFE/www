@@ -148,14 +148,17 @@ export default class Pay extends React.Component {
                 {cardName}({this.state.card === "month" ? 30 : 7}天)
               </h1>
               <p>
-                可叠加购买多次，独立计算
-                {this.state.card === "month" ? "月" : "周"}卡时间
+                可叠加购买多次，独立计算{cardName}时间
                 <br />
                 次数不累积到第二天，建议领到最大前一个囤包
                 <br />
                 付款后刷新页面查看次数，1分钟内生效
                 <br />
                 不支持退款，包括但不限于饿了么、美团和谐等因素
+                <br />
+                <span style={{ color: "#dd2323" }}>
+                  由于最近饿了么不稳定，请谨慎购买饿了么{cardName}
+                </span>
               </p>
               <Radio.Group
                 onChange={event =>
