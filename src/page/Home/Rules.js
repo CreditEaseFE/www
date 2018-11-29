@@ -44,13 +44,21 @@ export default class Rules extends React.Component {
         <p>由于国外服务器速度不稳定，本站启用两个域名：</p>
         <ul>
           <li>
-            <a href="https://mtdhb.org" target="_blank">
+            <a
+              href="https://mtdhb.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               https://mtdhb.org
             </a>{" "}
             - 部署在 netlify
           </li>
           <li>
-            <a href="https://www.mtdhb.org" target="_blank">
+            <a
+              href="https://www.mtdhb.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               https://www.mtdhb.org
             </a>{" "}
             - 部署在 gh-pages

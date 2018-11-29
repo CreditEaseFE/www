@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Button, message, Icon, Radio } from "antd";
+import { Button, message, Icon, Select } from "antd";
 import Clipboard from "clipboard";
 import styled from "styled-components";
 import isWeixin from "is-weixin";
@@ -147,6 +147,23 @@ export default class Pay extends React.Component {
                 {this.state.card === "month" ? "18.88" : "8.88"}元 付费
                 {cardName}({this.state.card === "month" ? 30 : 7}天)
               </h1>
+              <Select
+                defaultValue={this.state.application}
+                style={{ marginBottom: "20px" }}
+                onSelect={application =>
+                  this.setState({ application, qrcode: null })
+                }
+              >
+                <Select.Option value={0}>
+                  美团{cardName}-每天获得20次
+                </Select.Option>
+                <Select.Option value={1}>
+                  饿了么{cardName}-每天获得50次
+                </Select.Option>
+                <Select.Option value={2} disabled>
+                  星选{cardName}-暂不支持付费
+                </Select.Option>
+              </Select>
               <p>
                 可叠加购买多次，独立计算{cardName}时间
                 <br />
@@ -155,20 +172,9 @@ export default class Pay extends React.Component {
                 付款后刷新页面查看次数，1分钟内生效
                 <br />
                 <span style={{ color: "#dd2323" }}>
-                  不支持退款，包括但不限于美团和谐等因素
+                  不支持退款，包括但不限于饿了么、美团和谐等因素
                 </span>
               </p>
-              <Radio.Group
-                onChange={event =>
-                  this.setState({ application: event.target.value })
-                }
-                value={this.state.application}
-                style={{ marginBottom: "12px" }}
-              >
-                <Radio value={0}>美团{cardName}-每天获得20次</Radio>
-              </Radio.Group>
-              <p>饿了么和星选，暂不支持付费购买</p>
-              <br />
               <div>
                 <Button
                   type="danger"
