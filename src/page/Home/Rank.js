@@ -11,10 +11,9 @@ export default class Rank extends React.Component {
 
   render() {
     const { data } = this.props;
-    (data.meituan || []).forEach((item, index) => (item.key = index));
-    (data.ele || []).forEach((item, index) => (item.key = index));
-    (data.star || []).forEach((item, index) => (item.key = index));
-    (data.eleYesterday || []).forEach((item, index) => (item.key = index));
+    Object.keys(data).forEach(key => {
+      (data[key] || []).forEach((item, index) => (item.key = index));
+    });
 
     const columns = [
       {
@@ -40,7 +39,11 @@ export default class Rank extends React.Component {
           )
       },
       { title: "uid", dataIndex: "userId", width: "33%" },
-      { title: "贡献数量", dataIndex: "count", width: "33%" }
+      {
+        title: this.state.rank === "pay" ? "充值金额" : "贡献数量",
+        dataIndex: "count",
+        width: "33%"
+      }
     ];
 
     if (this.state.rank === "eleYesterday") {
@@ -52,13 +55,13 @@ export default class Rank extends React.Component {
       <div>
         <div style={{ color: "#dd2323" }}>排行榜数据半小时更新一次</div>
         <div>饿了么昨日排名前N，今日赠送对应的美团次数</div>
-        <div style={{ marginTop: 15, paddingBottom: 15 }}>
-          贡献排行榜：
+        <div style={{ marginTop: 15, marginBottom: 15 }}>
           <Radio.Group onChange={this.onChange} value={this.state.rank}>
             <Radio value="meituan">美团</Radio>
             <Radio value="ele">饿了么</Radio>
             <Radio value="eleYesterday">饿了么昨日</Radio>
             <Radio value="star">饿了么星选</Radio>
+            <Radio value="pay">充值</Radio>
           </Radio.Group>
         </div>
         <Table

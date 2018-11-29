@@ -184,11 +184,14 @@ export default class Home extends React.Component {
       .then(data => this.setState({ trendData: data.data }));
   };
 
-  getRank = e => {
-    axios
-      .get(apis.getRank)
-      .then(data => this.setState({ rankData: data.data }));
-  };
+  async getRank() {
+    const [rank, payRank] = await Promise.all([
+      axios.get(apis.getRank),
+      axios.get(apis.getPayRank)
+    ]);
+    rank.data.pay = payRank.data;
+    this.setState({ rankData: rank.data });
+  }
 
   async getUserInfo() {
     const user = await axios.get(apis.getUser);
@@ -370,7 +373,9 @@ export default class Home extends React.Component {
                     style={{ marginRight: 5 }}
                     alt=""
                   />
-                ) : ''}
+                ) : (
+                  ""
+                )}
                 {[
                   { text: "美团", value: meituan },
                   { text: "饿了么", value: ele },
