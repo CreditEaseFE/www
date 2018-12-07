@@ -41,30 +41,6 @@ export default class Rules extends React.Component {
           9. 网站不能保证 100% 领取成功，会有意外情况，不喜勿用。欢迎提 issue
           或者加群反馈给我们，我们也在不断修复问题。
         </p>
-        <p>由于国外服务器速度不稳定，本站启用两个域名：</p>
-        <ul>
-          <li>
-            <a
-              href="https://mtdhb.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              https://mtdhb.org
-            </a>{" "}
-            - 部署在 netlify
-          </li>
-          <li>
-            <a
-              href="https://www.mtdhb.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              https://www.mtdhb.org
-            </a>{" "}
-            - 部署在 gh-pages
-          </li>
-        </ul>
-        <p>大家可视自己的情况访问不同网址</p>
       </div>
     );
   }
