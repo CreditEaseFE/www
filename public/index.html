@@ -65,7 +65,7 @@
     </script>
     <!-- End Single Page Apps for GitHub Pages -->
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.2.3/antd.min.css" rel="stylesheet" onerror="this.href = '%PUBLIC_URL%/cdn/antd/3.2.3/antd.min.css'">
+    <link href="%PUBLIC_URL%/static/antd/3.2.3/antd.css" rel="stylesheet">
     <script>
       var _hmt = _hmt || [];
       (function() {
@@ -80,25 +80,13 @@
   <body>
     <div id="root"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/15.4.1/react-dom.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-router/3.2.0/ReactRouter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.2.3/antd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.0.4/echarts.min.js"></script>
-
-    <script>
-      if (!window.React) {
-        document.write('<script src="%PUBLIC_URL%/cdn/babel-polyfill/6.26.0/polyfill.min.js"><\/script>');
-        document.write('<script src="%PUBLIC_URL%/cdn/react/15.4.2/react.min.js"><\/script>');
-        document.write('<script src="%PUBLIC_URL%/cdn/react/15.4.1/react-dom.min.js"><\/script>');
-        document.write('<script src="%PUBLIC_URL%/cdn/react-router/3.2.0/ReactRouter.min.js"><\/script>');
-        document.write('<script src="%PUBLIC_URL%/cdn/moment.js/2.22.1/moment.min.js"><\/script>');
-        document.write('<script src="%PUBLIC_URL%/cdn/antd/3.2.3/antd.min.js"><\/script>');
-        document.write('<script src="%PUBLIC_URL%/cdn/echarts/4.0.4/echarts.min.js"><\/script>');
-      }
-    </script>
+    <script src="%PUBLIC_URL%/static/babel-polyfill/6.26.0/babel-polyfill.js"></script>
+    <script src="%PUBLIC_URL%/static/react/15.4.2/react.js"></script>
+    <script src="%PUBLIC_URL%/static/react-dom/15.4.1/react-dom.js"></script>
+    <script src="%PUBLIC_URL%/static/react-router/3.2.0/react-router.js"></script>
+    <script src="%PUBLIC_URL%/static/moment/2.22.1/moment.js"></script>
+    <script src="%PUBLIC_URL%/static/antd/3.2.3/antd.js"></script>
+    <script src="%PUBLIC_URL%/static/echarts/4.0.4/echarts.js"></script>
   </body>
 
 </html>
