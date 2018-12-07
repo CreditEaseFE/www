@@ -3,12 +3,7 @@
 [![GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 [![Build Status](https://travis-ci.org/mtdhb/www.svg?branch=master)](https://travis-ci.org/mtdhb/www)
 
-由于国外服务器速度不稳定，本站启用两个域名：
-
-- <https://mtdhb.org> - 部署在 [netlify](https://app.netlify.com)
-- <https://www.mtdhb.org> - 部署在 [gh-pages](https://pages.github.com)
-
-大家可视自己的情况访问不同网址
+<https://mtdhb.org>
 
 ## 开发
 
