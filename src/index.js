@@ -9,6 +9,6 @@ render(<App />, document.getElementById("root"));
 
 register({
   onUpdate() {
-    message.info(NewVersion(), 0);
+    message.info(<NewVersion />, 0);
   }
 });
