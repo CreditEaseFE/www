@@ -20,4 +20,31 @@ npm run dev
 npm run build
 ```
 
-将生成的 `build/` 目录提交到网站根目录，并在你的静态服务器上做[相关配置](https://github.com/mtdhb/mtdhb/issues/135)
+将生成的 `build/` 目录提交到网站根目录，并在你的静态服务器上做以下配置：
+
+### nginx
+
+```nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
+或
+
+```nginx
+error_page 404 =200 /index.html;
+```
+
+### apache
+
+```apache
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+```
