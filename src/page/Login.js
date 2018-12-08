@@ -1,114 +1,101 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Breadcrumb, message } from "antd";
-import { browserHistory } from "react-router";
-import { axios, apis, qs } from "../api";
+import { Link, withRouter } from "react-router-dom";
+import { axios, apis, qs, login } from "../api";
 import Notice from "../component/Notice";
 
-class Login extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      noticeList: []
-    };
-    document.body.classList.remove("is-home");
-  }
+const Login = ({ form }) => {
+  const [loading, setLoading] = useState(false);
+  const { getFieldDecorator } = form;
 
-  login = data => {
-    axios
-      .post(apis.login, qs.stringify(data))
-      .then(data => {
-        if (data.code === 0) {
-          localStorage.setItem("token", data.data.token);
-          browserHistory.push("/");
-        } else {
-          message.error(data.message);
-        }
-      })
-      .catch(err => message.error(err.message));
+  const doLogin = async params => {
+    try {
+      setLoading(true);
+      const data = await axios.post(apis.login, qs.stringify(params));
+      if (data.code === 0) {
+        login(data.data.token);
+      } else {
+        message.error(data.message);
+      }
+    } catch (e) {
+      message.error(e.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+  const handleSubmit = event => {
+    event.preventDefault();
+    form.validateFields(async (err, values) => {
       if (!err) {
         // console.log('Received values of form: ', values);
-        this.login(values);
+        await doLogin(values);
       }
     });
   };
 
-  render() {
-    const { getFieldDecorator } = this.props.form;
+  useEffect(() => {
+    document.body.classList.remove("is-home");
+  }, []);
 
-    return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <Form.Item>
-          <h2>登录</h2>
-          <span style={{ color: "#aaa" }}>
-            每天大红包 · 一键领取手气最佳红包
-          </span>
-        </Form.Item>
-        <Form.Item>
-          {getFieldDecorator("account", {
-            rules: [{ required: true, message: "请输入帐号" }]
-          })(<Input placeholder="请输入帐号" />)}
-        </Form.Item>
-        <Form.Item>
-          {getFieldDecorator("password", {
-            rules: [{ required: true, message: "请输入密码" }]
-          })(<Input type="password" placeholder="请输入密码" />)}
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-          >
-            登录
-          </Button>
-          <a
-            onClick={e => {
-              e.preventDefault();
-              browserHistory.push("/apply");
+  return (
+    <Form onSubmit={handleSubmit} className="login-form">
+      <Form.Item>
+        <h2>登录</h2>
+        <span style={{ color: "#aaa" }}>每天大红包 · 一键领取手气最佳红包</span>
+      </Form.Item>
+      <Form.Item>
+        {getFieldDecorator("account", {
+          rules: [{ required: true, message: "请输入帐号" }]
+        })(<Input placeholder="请输入帐号" />)}
+      </Form.Item>
+      <Form.Item>
+        {getFieldDecorator("password", {
+          rules: [{ required: true, message: "请输入密码" }]
+        })(<Input type="password" placeholder="请输入密码" />)}
+      </Form.Item>
+      <Form.Item>
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="login-form-button"
+          loading={loading}
+        >
+          登录
+        </Button>
+        <Link to="/apply" style={{ marginLeft: "12px" }}>
+          还没有帐号，马上注册
+        </Link>
+      </Form.Item>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <Link
+            to="/applyResetPassword"
+            style={{
+              display: "inline-block",
+              margin: "12px 0"
             }}
-            style={{ marginLeft: "12px" }}
           >
-            还没有帐号，马上注册
+            重置密码
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a
+            href="https://github.com/mtdhb/mtdhb/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-block",
+              margin: "12px 0"
+            }}
+          >
+            反馈问题
           </a>
-        </Form.Item>
-        <Breadcrumb>
-          <Breadcrumb.Item>
-            <a
-              onClick={e => {
-                e.preventDefault();
-                browserHistory.push("/applyResetPassword");
-              }}
-              style={{
-                display: "inline-block",
-                margin: "12px 0"
-              }}
-            >
-              重置密码
-            </a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <a
-              href="https://github.com/mtdhb/mtdhb/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-block",
-                margin: "12px 0"
-              }}
-            >
-              反馈问题
-            </a>
-          </Breadcrumb.Item>
-        </Breadcrumb>
-        <Notice />
-      </Form>
-    );
-  }
-}
+        </Breadcrumb.Item>
+      </Breadcrumb>
+      <Notice />
+    </Form>
+  );
+};
 
-export default Form.create()(Login);
+export default withRouter(Form.create()(Login));

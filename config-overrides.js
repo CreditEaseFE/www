@@ -7,7 +7,7 @@ module.exports = (config, env) => {
     antd: "antd",
     echarts: "echarts",
     "react-dom": "ReactDOM",
-    "react-router": "ReactRouter"
+    "react-router-dom": "ReactRouterDOM"
   };
 
   if (env === "production") {

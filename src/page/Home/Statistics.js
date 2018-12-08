@@ -1,31 +1,18 @@
 import React from "react";
 import Echarts from "../../component/Echarts";
 
-export default class Statistics extends React.Component {
-  render() {
-    let { ele = [], meituan = [] } = this.props.data;
-
-    if (!ele.length && !meituan.length)
-      return <div style={{ textAlign: "center" }}>暂无数据</div>;
-
-    return (
-      <div>
-        <div style={{ color: "#dd2323" }}>统计数据半小时更新一次</div>
-        <div>成功领取最大红包的总金额（单位：千元）</div>
-        <div>成功领取最大红包的总个数（单位：千个）</div>
-        <div>
-          因为现在支持了领取到最大前一个, 所以那部分领取不在图表统计之中
-        </div>
-        <div>因为现在饿了么只能领到最大前一个，所以不再展示图表统计</div>
-        {this.renderPie()}
-      </div>
-    );
+export default ({ data: { ele = [], meituan = [] }, pieData }) => {
+  if (!ele.length && !meituan.length) {
+    return <div style={{ textAlign: "center" }}>暂无数据</div>;
   }
 
-  renderPie() {
-    let { pieData } = this.props;
-
-    return [
+  return (
+    <div>
+      <div style={{ color: "#dd2323" }}>统计数据半小时更新一次</div>
+      <div>成功领取最大红包的总金额（单位：千元）</div>
+      <div>成功领取最大红包的总个数（单位：千个）</div>
+      <div>因为现在支持了领取到最大前一个, 所以那部分领取不在图表统计之中</div>
+      <div>因为现在饿了么只能领到最大前一个，所以不再展示图表统计</div>
       <Echarts
         style={{ width: "100%", height: "300px", marginTop: "24px" }}
         key={1}
@@ -45,9 +32,9 @@ export default class Statistics extends React.Component {
               type: "pie",
               radius: "55%",
               center: ["50%", "60%"],
-              data: pieData.meituan.map(o => ({
-                value: o.proportion / 1000,
-                name: o.price
+              data: pieData.meituan.map(item => ({
+                value: item.proportion / 1000,
+                name: item.price
               })),
               itemStyle: {
                 emphasis: {
@@ -60,6 +47,6 @@ export default class Statistics extends React.Component {
           ]
         }}
       />
-    ];
-  }
-}
+    </div>
+  );
+};

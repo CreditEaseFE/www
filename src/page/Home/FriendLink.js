@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   padding: 15px 0;
 `;
 
-const Link = styled.a.attrs({
+const Item = styled.a.attrs({
   target: "_blank",
   rel: "noopener noreferrer"
 })`
@@ -23,25 +23,19 @@ const Link = styled.a.attrs({
   }
 `;
 
-export default class FriendLink extends React.Component {
-  state = {
-    links: [
-      {
-        href: "http://wpa.qq.com/msgrd?v=3&uin=397909414&site=qq&menu=yes",
-        text: "联系管理员"
-      }
-    ]
-  };
-
-  render() {
-    return (
-      <Wrapper>
-        <Icon type="usergroup-add" />
-        &nbsp;{" "}
-        {this.state.links.map(link => (
-          <Link href={link.href}>{link.text}</Link>
-        ))}
-      </Wrapper>
-    );
+const links = [
+  {
+    href: "http://wpa.qq.com/msgrd?v=3&uin=397909414&site=qq&menu=yes",
+    text: "联系管理员"
   }
-}
+];
+
+export default () => (
+  <Wrapper>
+    <Icon type="usergroup-add" />
+    &nbsp;{" "}
+    {links.map(link => (
+      <Item href={link.href}>{link.text}</Item>
+    ))}
+  </Wrapper>
+);

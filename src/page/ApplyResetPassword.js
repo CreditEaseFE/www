@@ -1,164 +1,144 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { withRouter } from "react-router-dom";
 import { Button, Form, Input, message } from "antd";
 import { axios, apis, qs } from "../api";
 
-class ApplyResetPassword extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      mail: "",
-      mailError: false,
-      mailErrorHelp: "",
-      captcha: "",
-      captchaError: false,
-      captchaErrorHelp: "",
-      finished: false,
-      isLoading: false
-    };
-    document.body.classList.remove("is-home");
-  }
+const ApplyResetPassword = () => {
+  const [mail, setMail] = useState("");
+  const [mailError, setMailError] = useState(false);
+  const [mailErrorHelp, setMailErrorHelp] = useState("");
+  const [captcha, setCaptcha] = useState("");
+  const [captchaImage, setCaptchaImage] = useState("");
+  const [captchaError, setCaptchaError] = useState(false);
+  const [captchaErrorHelp, setCaptchaErrorHelp] = useState("");
+  const [finished, setFinished] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  resetPasswordMail = data => {
-    this.setState({ isLoading: true });
-
-    axios
-      .post(apis.resetPasswordMail, qs.stringify(data))
-      .then(data => {
-        if (data.code === 0) {
-          this.setState({ finished: true });
-        } else {
-          if ([10004, 10018].includes(data.code)) {
-            this.setState({ mail: "" });
-          }
-          this.setState({ finished: false });
-          message.error(data.message);
-        }
-        this.changeCaptcha();
-        this.setState({ isLoading: false, captcha: "" });
-      })
-      .catch(err => {
-        console.error(err);
-        this.changeCaptcha();
-        this.setState({ isLoading: false });
-      });
+  const changeCaptcha = () => {
+    setCaptchaImage(apis.getCaptcha + "?" + new Date().getTime());
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    let { mail, captcha } = this.state;
-
-    if (this.validatmail(mail) && this.validateCaptcha(captcha)) {
-      this.resetPasswordMail({ mail, captcha });
+  const resetPasswordMail = async () => {
+    try {
+      setLoading(true);
+      const data = await axios.post(
+        apis.resetPasswordMail,
+        qs.stringify({ mail, captcha })
+      );
+      if (data.code === 0) {
+        setFinished(true);
+      } else {
+        if ([10004, 10018].includes(data.code)) {
+          setMail("");
+        }
+        setFinished(false);
+        message.error(data.message);
+      }
+      setCaptcha("");
+    } catch (e) {
+      message.error(e.message);
+    } finally {
+      changeCaptcha();
+      setLoading(false);
     }
   };
 
-  validatmail = mail => {
+  const validateMail = () => {
     if (
       /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(
         mail
       )
     ) {
-      this.setState({ mailError: false, mailErrorHelp: "", mail });
+      setMailError(false);
+      setMailErrorHelp("");
       return true;
-    } else {
-      let mailErrorHelp = mail ? "邮箱格式不正确" : "请输入邮箱";
-      this.setState({ mailError: true, mailErrorHelp });
-      return false;
     }
+    setMailError(true);
+    setMailErrorHelp(mail ? "邮箱格式不正确" : "请输入邮箱");
+    return false;
   };
 
-  validateCaptcha = captcha => {
+  const validateCaptcha = () => {
     if (captcha.length === 4) {
-      this.setState({
-        captchaError: false,
-        captchaErrorHelp: "",
-        captcha
-      });
+      setCaptchaError(false);
+      setCaptchaErrorHelp("");
       return true;
-    } else {
-      this.setState({
-        captchaError: true,
-        captchaErrorHelp: "验证码只能是4位字符"
-      });
-      return false;
+    }
+    setCaptchaError(true);
+    setCaptchaErrorHelp("验证码只能是4位字符");
+    return false;
+  };
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    if (validateMail() && validateCaptcha()) {
+      await resetPasswordMail();
     }
   };
 
-  changeCaptcha = (dom = document.getElementById("captchaCode")) =>
-    (dom.src = apis.resetPasswordCaptcha + "?" + new Date().getTime());
+  useEffect(() => {
+    document.body.classList.remove("is-home");
+    changeCaptcha();
+  }, []);
 
-  renderForm() {
-    let {
-      mail,
-      mailError,
-      mailErrorHelp,
-      captchaError,
-      captchaErrorHelp,
-      isLoading,
-      captcha
-    } = this.state;
-
-    return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Item>
-          <h2>申请重置密码</h2>
-        </Form.Item>
-        <Form.Item
-          key={0}
-          validateStatus={mailError ? "error" : ""}
-          help={mailErrorHelp}
-        >
-          <Input
-            name="mail"
-            value={mail}
-            placeholder="请输入邮箱"
-            onChange={e => this.setState({ mail: e.target.value })}
-          />
-        </Form.Item>
-        <Form.Item
-          key={1}
-          validateStatus={captchaError ? "error" : ""}
-          help={captchaErrorHelp}
-        >
-          <Input
-            name="captcha"
-            value={captcha}
-            placeholder="请输入验证码"
-            onChange={e => this.setState({ captcha: e.target.value })}
-            style={{ width: "185px" }}
-          />
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Form.Item>
+        <h2>申请重置密码</h2>
+      </Form.Item>
+      <Form.Item
+        key={0}
+        validateStatus={mailError ? "error" : ""}
+        help={mailErrorHelp}
+      >
+        <Input
+          name="mail"
+          value={mail}
+          placeholder="请输入邮箱"
+          onChange={event => setMail(event.target.value)}
+        />
+      </Form.Item>
+      <Form.Item
+        key={1}
+        validateStatus={captchaError ? "error" : ""}
+        help={captchaErrorHelp}
+      >
+        <Input
+          name="captcha"
+          value={captcha}
+          placeholder="请输入验证码"
+          onChange={event => setCaptcha(event.target.value)}
+          style={{ width: "185px" }}
+        />
+        {captchaImage && (
           <img
             id="captchaCode"
-            src={apis.resetPasswordCaptcha}
-            onClick={e => this.changeCaptcha(e.target)}
+            src={captchaImage}
+            onClick={changeCaptcha}
             style={{ marginTop: "-1px", cursor: "pointer" }}
             alt="验证码"
           />
-        </Form.Item>
-        <Form.Item key={2}>
-          <Button
-            type="primary"
-            loading={isLoading}
-            htmlType="submit"
-            className="login-form-button"
-          >
-            申请重置密码
-          </Button>
-        </Form.Item>
-        {this.state.finished ? (
-          <div style={{ fontSize: "16px", color: "#dd2323" }}>
-            邮件已发送，请点击链接重新设置密码！若长时间未收到邮件，请重新申请。
-          </div>
-        ) : (
-          ""
         )}
-      </Form>
-    );
-  }
+      </Form.Item>
+      <Form.Item key={2}>
+        <Button
+          type="primary"
+          loading={loading}
+          htmlType="submit"
+          className="login-form-button"
+        >
+          申请重置密码
+        </Button>
+      </Form.Item>
+      {finished ? (
+        <div style={{ fontSize: "16px", color: "#dd2323" }}>
+          邮件已发送，请点击链接重新设置密码！若长时间未收到邮件，请重新申请。
+        </div>
+      ) : (
+        ""
+      )}
+    </Form>
+  );
+};
 
-  render() {
-    return <div>{this.renderForm()}</div>;
-  }
-}
-
-export default Form.create()(ApplyResetPassword);
+export default withRouter(Form.create()(ApplyResetPassword));

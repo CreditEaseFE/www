@@ -1,6 +1,6 @@
-import { browserHistory } from "react-router";
+import history from "../history";
 
 export default () => {
   localStorage.removeItem("token");
-  browserHistory.push("/login");
+  history.replace("/login");
 };

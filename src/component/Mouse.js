@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
 const WordAnimate = keyframes`
@@ -21,38 +21,32 @@ const Word = styled.div`
   z-index: 500;
 `;
 
-export default class Mouse extends Component {
-  state = {
-    values: "富强、民主、文明、和谐、自由、平等、公正、法治、爱国、敬业、诚信、友善".split(
+const random = (min, max) => ~~(Math.random() * (max - min + 1)) + min;
+
+export default () => {
+  const [values] = useState(
+    "富强、民主、文明、和谐、自由、平等、公正、法治、爱国、敬业、诚信、友善".split(
       "、"
-    ),
-    words: []
-  };
+    )
+  );
+  const [words, setWords] = useState([]);
 
-  constructor() {
-    super();
-    window.addEventListener("mousedown", this.onMouseDown.bind(this));
-  }
-
-  render() {
-    return <div>{this.state.words}</div>;
-  }
-
-  onMouseDown(event) {
-    let { words, values } = this.state;
+  const onMouseDown = event => {
     words.push(
       <Word
         key={Date.now()}
         style={{ left: `${event.x - 16}px`, top: `${event.y - 16}px` }}
       >
-        {values[this.random(0, values.length - 1)]}
+        {values[random(0, values.length - 1)]}
       </Word>
     );
-    words = words.slice(-20);
-    this.setState({ words });
-  }
+    setWords(words.slice(-20));
+  };
 
-  random(min, max) {
-    return ~~(Math.random() * (max - min + 1)) + min;
-  }
-}
+  useEffect(() => {
+    window.addEventListener("mousedown", onMouseDown);
+    return () => window.removeEventListener("mousedown", onMouseDown);
+  }, []);
+
+  return <div>{words}</div>;
+};
