@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Breadcrumb, Tabs, message, Carousel } from "antd";
+import { Alert, Breadcrumb, Tabs, message, Carousel, Skeleton } from "antd";
 import styled from "styled-components";
 import moment from "moment";
 import { axios, apis, logout } from "../../api";
@@ -143,28 +143,33 @@ export default class Home extends React.Component {
 
   renderCarousel() {
     const { carouselRecords = [] } = this.state;
+    const style = {
+      color: "#5bab60",
+      fontSize: "16px",
+      whiteSpace: "nowrap"
+    };
+
     return (
       <div style={{ height: "30px", overflow: "hidden" }}>
         {carouselRecords.length ? (
           <Carousel vertical autoplay>
             {carouselRecords.map((o, i) => (
-              <div
-                key={i}
-                style={{
-                  color: "#5bab60",
-                  fontSize: "16px",
-                  whiteSpace: "nowrap"
-                }}
-              >
-                {o.mail} 在 {moment(new Date(o.gmtModified)).format("HH:mm:ss")}{" "}
-                领到
-                <span style={{ color: "#dd2323" }}>&nbsp;{o.price}&nbsp;</span>
-                元{o.application === 0 ? "美团" : "饿了么"}大红包
+              <div key={i}>
+                <div style={style}>
+                  {o.mail} 在{" "}
+                  {moment(new Date(o.gmtModified)).format("HH:mm:ss")} 领到
+                  <span style={{ color: "#dd2323" }}>
+                    &nbsp;{o.price}&nbsp;
+                  </span>
+                  元{o.application === 0 ? "美团" : "饿了么"}大红包
+                </div>
               </div>
             ))}
           </Carousel>
         ) : (
-          ""
+          <div style={{ ...style, marginTop: -10, width: 360 / 0.38 }}>
+            <Skeleton active />
+          </div>
         )}
       </div>
     );
@@ -303,7 +308,19 @@ export default class Home extends React.Component {
 
   renderHello() {
     const { mail, id } = this.state.user;
-    return <h3>{mail ? `您好 ${mail} (uid: ${id})` : "您好"}</h3>;
+    return (
+      <h3 style={{ height: 24, overflow: "hidden" }}>
+        {mail ? (
+          <span>
+            您好 {mail} (uid: {id})
+          </span>
+        ) : (
+          <div style={{ marginTop: -10, width: 320 / 0.38 }}>
+            <Skeleton active />
+          </div>
+        )}
+      </h3>
+    );
   }
 
   renderBreadcrumb = e => {

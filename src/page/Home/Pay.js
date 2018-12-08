@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Button, message, Icon, Select } from "antd";
+import { Button, message, Icon, Select, Modal } from "antd";
 import Clipboard from "clipboard";
 import styled from "styled-components";
 import isWeixin from "is-weixin";
@@ -34,20 +34,6 @@ const RmbButton = styled(Button)`
   &:hover ${Image} {
     display: block;
   }
-`;
-
-const Card = styled.div`
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 400;
-  background: #fff;
-  display: fixed;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
 `;
 
 export default class Pay extends React.Component {
@@ -140,76 +126,62 @@ export default class Pay extends React.Component {
             付费月卡
           </RmbButton>
         </Button.Group>
-        {this.state.showKa && (
-          <Card>
-            <div>
-              <h1>
-                {this.state.card === "month" ? "18.88" : "8.88"}元 付费
-                {cardName}({this.state.card === "month" ? 30 : 7}天)
-              </h1>
-              <Select
-                defaultValue={this.state.application}
-                style={{ marginBottom: "20px" }}
-                onSelect={application =>
-                  this.setState({ application, qrcode: null })
-                }
-              >
-                <Select.Option value={0}>
-                  美团{cardName}-每天获得20次
-                </Select.Option>
-                <Select.Option value={1}>
-                  饿了么{cardName}-每天获得50次
-                </Select.Option>
-                <Select.Option value={2} disabled>
-                  星选{cardName}-暂不支持付费
-                </Select.Option>
-              </Select>
-              <p>
-                可叠加购买多次，独立计算{cardName}时间
+        <Modal
+          title={`${
+            this.state.card === "month" ? "18.88" : "8.88"
+          }元 付费${cardName}(${this.state.card === "month" ? 30 : 7}天)`}
+          visible={this.state.showKa}
+          confirmLoading={this.state.wxPayLoading}
+          onOk={() => this.wxPay()}
+          okText="微信支付"
+          onCancel={() => this.setState({ showKa: false })}
+          cancelText="取消"
+        >
+          <div>
+            <span>选择：</span>
+            <Select
+              defaultValue={this.state.application}
+              style={{ marginBottom: "20px" }}
+              onSelect={application =>
+                this.setState({ application, qrcode: null })
+              }
+            >
+              <Select.Option value={0}>
+                美团{cardName}-每天获得20次
+              </Select.Option>
+              <Select.Option value={1} disabled>
+                饿了么{cardName}-暂不支持付费
+              </Select.Option>
+              <Select.Option value={2} disabled>
+                星选{cardName}-暂不支持付费
+              </Select.Option>
+            </Select>
+          </div>
+          <ul>
+            <li>可叠加购买多次，独立计算{cardName}时间</li>
+            <li>次数不累积到第二天，建议领到最大前一个囤包</li>
+            <li>付款后刷新页面查看次数，1分钟内生效</li>
+            <li style={{ color: "#dd2323" }}>
+              不支持退款，包括但不限于饿了么、美团和谐等因素
+            </li>
+          </ul>
+          {this.state.qrcode && (
+            <div style={{ textAlign: "center" }}>
+              <br />
+              <img
+                src={this.state.qrcode}
+                width={200}
+                height={200}
+                alt="微信付款码"
+              />
+              <p style={{ marginTop: 10 }}>
+                使用微信扫一扫付款
                 <br />
-                次数不累积到第二天，建议领到最大前一个囤包
-                <br />
-                付款后刷新页面查看次数，1分钟内生效
-                <br />
-                <span style={{ color: "#dd2323" }}>
-                  不支持退款，包括但不限于饿了么、美团和谐等因素
-                </span>
+                或者在微信环境中打开本站
               </p>
-              <div>
-                <Button
-                  type="danger"
-                  onClick={() => this.setState({ showKa: false })}
-                >
-                  取消
-                </Button>
-                &nbsp;&nbsp;&nbsp;
-                <Button
-                  type="primary"
-                  loading={this.state.wxPayLoading}
-                  onClick={() => this.wxPay()}
-                >
-                  微信支付
-                </Button>
-              </div>
-              {this.state.qrcode && (
-                <div>
-                  <br />
-                  <img
-                    src={this.state.qrcode}
-                    width={200}
-                    height={200}
-                    alt="微信付款码"
-                  />
-                  <p style={{ marginTop: 10 }}>
-                    使用微信扫一扫付款
-                    <br />
-                    或者在微信环境中打开本站
-                  </p>
-                </div>
-              )}
             </div>
-          </Card>
-        )}
+          )}
+        </Modal>
       </Container>
     );
   }

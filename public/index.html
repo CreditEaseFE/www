@@ -1,21 +1,32 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="keywords" content="每天大红包,一键最佳,一键领取饿了么、美团手气最佳红包,mtdhb.org">
-    <meta name="description" content="每天大红包,一键最佳,一键领取饿了么、美团手气最佳红包,mtdhb.org">
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="webkit" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="keywords"
+      content="每天大红包,一键最佳,一键领取饿了么、美团手气最佳红包,mtdhb.org"
+    />
+    <meta
+      name="description"
+      content="每天大红包,一键最佳,一键领取饿了么、美团手气最佳红包,mtdhb.org"
+    />
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -29,7 +40,7 @@
 
     <script>
       if (window.location.host === "www.mtdhb.org") {
-        window.location.replace("https://mtdhb.org")
+        window.location.replace("https://mtdhb.org");
       }
     </script>
 
@@ -49,23 +60,32 @@
       (function(l) {
         if (l.search) {
           var q = {};
-          l.search.slice(1).split('&').forEach(function(v) {
-            var a = v.split('=');
-            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-          });
+          l.search
+            .slice(1)
+            .split("&")
+            .forEach(function(v) {
+              var a = v.split("=");
+              q[a[0]] = a
+                .slice(1)
+                .join("=")
+                .replace(/~and~/g, "&");
+            });
           if (q.p !== undefined) {
-            window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + (q.p || '') +
-              (q.q ? ('?' + q.q) : '') +
-              l.hash
+            window.history.replaceState(
+              null,
+              null,
+              l.pathname.slice(0, -1) +
+                (q.p || "") +
+                (q.q ? "?" + q.q : "") +
+                l.hash
             );
           }
         }
-      }(window.location))
+      })(window.location);
     </script>
     <!-- End Single Page Apps for GitHub Pages -->
 
-    <link href="%PUBLIC_URL%/static/antd/3.2.3/antd.css" rel="stylesheet">
+    <link href="%PUBLIC_URL%/static/antd/3.11.0/antd.css" rel="stylesheet" />
     <script>
       var _hmt = _hmt || [];
       (function() {
@@ -85,8 +105,7 @@
     <script src="%PUBLIC_URL%/static/react-dom/15.4.1/react-dom.js"></script>
     <script src="%PUBLIC_URL%/static/react-router/3.2.0/react-router.js"></script>
     <script src="%PUBLIC_URL%/static/moment/2.22.1/moment.js"></script>
-    <script src="%PUBLIC_URL%/static/antd/3.2.3/antd.js"></script>
+    <script src="%PUBLIC_URL%/static/antd/3.11.0/antd.js"></script>
     <script src="%PUBLIC_URL%/static/echarts/4.0.4/echarts.js"></script>
   </body>
-
 </html>
