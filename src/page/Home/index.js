@@ -340,7 +340,7 @@ const Home = () => {
             type={payList.length ? "error" : "info"}
           />
         </div>
-        {payListVisible && (
+        {payListVisible && payList.length ? (
           <Table
             dataSource={payList.reverse()}
             columns={[
@@ -366,6 +366,8 @@ const Home = () => {
               total: payList.length
             }}
           />
+        ) : (
+          ""
         )}
       </div>
     );
