@@ -44,7 +44,10 @@ export default ({ user }) => {
   const [application, setApplication] = useState(0);
   const [qrcode, setQrcode] = useState("");
   const [loading, setLoading] = useState(false);
-  const cardName = card === "month" ? "月卡" : "周卡";
+  const cardName = { day: "日卡", week: "周卡", month: "月卡" }[card] || "异常";
+  const cardPrice =
+    { day: "1.88", week: "8.88", month: "18.88" }[card] || "异常";
+  const cardDays = { day: 1, week: 7, month: 30 }[card] || "异常";
   const weixin = isWeixin(navigator.userAgent);
 
   const wxPay = async () => {
@@ -151,25 +154,32 @@ export default ({ user }) => {
           type="danger"
           onClick={() => {
             setKa(true);
-            setCard("week");
+            setCard("month");
           }}
         >
-          付费周卡
+          购买月卡
         </RmbButton>
         <RmbButton
           type="danger"
           onClick={() => {
             setKa(true);
-            setCard("month");
+            setCard("week");
           }}
         >
-          付费月卡
+          购买周卡
+        </RmbButton>
+        <RmbButton
+          type="danger"
+          onClick={() => {
+            setKa(true);
+            setCard("day");
+          }}
+        >
+          购买日卡
         </RmbButton>
       </Button.Group>
       <Modal
-        title={`${card === "month" ? "18.88" : "8.88"}元 付费${cardName}(${
-          card === "month" ? 30 : 7
-        }天)`}
+        title={`${cardPrice}元 购买${cardName}(${cardDays}天)`}
         visible={ka}
         confirmLoading={loading}
         onOk={wxPay}
@@ -200,7 +210,7 @@ export default ({ user }) => {
           </Select>
         </div>
         <ul>
-          <li>可叠加购买多次，独立计算{cardName}时间</li>
+          <li>同一个账号可重复购买，次数会叠加，时间不延长</li>
           <li>次数不累积到第二天，建议领到最大前一个囤包</li>
           <li>付款后刷新页面查看次数，1分钟内生效</li>
           <li style={{ color: "#dd2323" }}>
