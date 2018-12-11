@@ -191,8 +191,8 @@ export default ({ user }) => {
             }}
           >
             <Select.Option value={0}>美团{cardName}-每天获得20次</Select.Option>
-            <Select.Option value={1} disabled>
-              饿了么{cardName}-暂不支持付费
+            <Select.Option value={1}>
+              饿了么{cardName}-每天获得20次
             </Select.Option>
             <Select.Option value={2} disabled>
               星选{cardName}-暂不支持付费
