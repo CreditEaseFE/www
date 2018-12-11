@@ -342,7 +342,7 @@ const Home = () => {
         </div>
         {payListVisible && payList.length ? (
           <Table
-            dataSource={payList.reverse()}
+            dataSource={payList}
             columns={[
               {
                 title: "卡号",
