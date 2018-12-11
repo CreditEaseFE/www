@@ -337,7 +337,7 @@ const Home = () => {
         </div>
         {payListVisible && payList.length ? (
           <div>
-            <p>非贡献小号加的次数列表（包括购买和排行榜赠送的次数）</p>
+            <p>购买、排行榜赠送的次数列表</p>
             <Table
               dataSource={payList}
               columns={[
