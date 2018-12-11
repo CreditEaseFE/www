@@ -306,17 +306,6 @@ const Home = () => {
                   "您还没有任何贡献，请查看规则和贡献教程"
                 ) : (
                   <div>
-                    {payList.length ? (
-                      <img
-                        src={require("../../static/vip.png")}
-                        width={20}
-                        height={20}
-                        style={{ marginRight: 5 }}
-                        alt=""
-                      />
-                    ) : (
-                      ""
-                    )}
                     {[
                       { text: "美团", value: meituan },
                       { text: "饿了么", value: ele },
@@ -341,31 +330,38 @@ const Home = () => {
           />
         </div>
         {payListVisible && payList.length ? (
-          <Table
-            dataSource={payList}
-            columns={[
-              {
-                title: "卡号",
-                dataIndex: "id"
-              },
-              {
-                title: "平台",
-                dataIndex: "application",
-                render: application =>
-                  ["美团", "饿了么", "饿了么星选"][application] || "异常"
-              },
-              {
-                title: "到期时间（含）",
-                dataIndex: "gmt_create",
-                render: gmt_create => (gmt_create || "异常").slice(0, 10)
-              }
-            ]}
-            pagination={{
-              pageSize: 5,
-              size: "small",
-              total: payList.length
-            }}
-          />
+          <div>
+            <p>非贡献小号加的次数列表（包括购买和排行榜赠送的次数）</p>
+            <Table
+              dataSource={payList}
+              columns={[
+                {
+                  title: "编号",
+                  dataIndex: "id"
+                },
+                {
+                  title: "平台",
+                  dataIndex: "application",
+                  render: application =>
+                    ["美团", "饿了么", "饿了么星选"][application] || "异常"
+                },
+                {
+                  title: "加次数",
+                  dataIndex: "number"
+                },
+                {
+                  title: "到期时间（含）",
+                  dataIndex: "gmt_create",
+                  render: gmt_create => (gmt_create || "异常").slice(0, 10)
+                }
+              ]}
+              pagination={{
+                pageSize: 5,
+                size: "small",
+                total: payList.length
+              }}
+            />
+          </div>
         ) : (
           ""
         )}
