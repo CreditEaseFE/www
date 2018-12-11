@@ -154,10 +154,16 @@ const Home = () => {
   const refresh = async id => {
     const { data } = await axios.get(`${apis.refresh}/${id}`);
     if (data.status === 0) {
-      setTimeout(() => refresh(id), 1000);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await refresh(id);
     } else {
-      historyList[0] = data;
-      setHistoryList(historyList);
+      const index = historyList.findIndex(item => item.id === id);
+      if (index === -1) {
+        setHistoryList([data, ...historyList]);
+      } else {
+        historyList[index] = data;
+        setHistoryList(historyList);
+      }
       await getAvailableCount();
     }
   };
