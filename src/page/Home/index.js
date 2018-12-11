@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Alert, Breadcrumb, Tabs, message, Carousel, Skeleton } from "antd";
+import {
+  Alert,
+  Breadcrumb,
+  Tabs,
+  message,
+  Carousel,
+  Skeleton,
+  Table
+} from "antd";
 import styled from "styled-components";
 import moment from "moment";
 import { Link, withRouter } from "react-router-dom";
@@ -40,6 +48,7 @@ const Home = () => {
   const [user, setUser] = useState({});
   const [cookies, setCookies] = useState([]);
   const [payList, setPayList] = useState([]);
+  const [payListVisible, setPayListVisible] = useState(false);
   const [number, setNumber] = useState({
     ele: {
       available: 0,
@@ -285,45 +294,80 @@ const Home = () => {
   const renderAvailable = () => {
     const { meituan, ele, star } = number;
     return (
-      <Alert
-        style={{ margin: "15px 0" }}
-        message={
-          user.mail ? (
-            [meituan, ele, star].every(item => !item || item.total === 0) ? (
-              "您还没有任何贡献，请查看规则和贡献教程"
-            ) : (
-              <div>
-                {payList.length ? (
-                  <img
-                    src={require("../../static/vip.png")}
-                    width={20}
-                    height={20}
-                    style={{ marginRight: 5 }}
-                    alt=""
-                  />
+      <div>
+        <div onClick={() => setPayListVisible(!payListVisible)}>
+          <Alert
+            style={{ margin: "15px 0" }}
+            message={
+              user.mail ? (
+                [meituan, ele, star].every(
+                  item => !item || item.total === 0
+                ) ? (
+                  "您还没有任何贡献，请查看规则和贡献教程"
                 ) : (
-                  ""
-                )}
-                {[
-                  { text: "美团", value: meituan },
-                  { text: "饿了么", value: ele },
-                  { text: "饿了么星选", value: star }
-                ].map(item => (
-                  <span>
-                    <span>{item.text}</span>
-                    <span style={{ color: "#dd2323", padding: "0 10px 0 5px" }}>
-                      {item.value.available}/{item.value.total}
-                    </span>
-                  </span>
-                ))}
-              </div>
-            )
-          ) : (
-            "数据加载中，长时间没有响应请刷新页面"
-          )
-        }
-        type={payList.length ? "error" : "info"}
-      />
+                  <div>
+                    {payList.length ? (
+                      <img
+                        src={require("../../static/vip.png")}
+                        width={20}
+                        height={20}
+                        style={{ marginRight: 5 }}
+                        alt=""
+                      />
+                    ) : (
+                      ""
+                    )}
+                    {[
+                      { text: "美团", value: meituan },
+                      { text: "饿了么", value: ele },
+                      { text: "饿了么星选", value: star }
+                    ].map(item => (
+                      <span>
+                        <span>{item.text}</span>
+                        <span
+                          style={{ color: "#dd2323", padding: "0 10px 0 5px" }}
+                        >
+                          {item.value.available}/{item.value.total}
+                        </span>
+                      </span>
+                    ))}
+                  </div>
+                )
+              ) : (
+                "数据加载中，长时间没有响应请刷新页面"
+              )
+            }
+            type={payList.length ? "error" : "info"}
+          />
+        </div>
+        {payListVisible && (
+          <Table
+            dataSource={payList.reverse()}
+            columns={[
+              {
+                title: "卡号",
+                dataIndex: "id"
+              },
+              {
+                title: "平台",
+                dataIndex: "application",
+                render: application =>
+                  ["美团", "饿了么", "饿了么星选"][application] || "异常"
+              },
+              {
+                title: "到期时间（含）",
+                dataIndex: "gmt_create",
+                render: gmt_create => (gmt_create || "异常").slice(0, 10)
+              }
+            ]}
+            pagination={{
+              pageSize: 5,
+              size: "small",
+              total: payList.length
+            }}
+          />
+        )}
+      </div>
     );
   };
 
